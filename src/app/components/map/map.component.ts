@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit } from '@angular/core';
 import * as leaf from 'leaflet';
 import { MapService } from '../../services/map.service';
 
@@ -7,7 +7,7 @@ import { MapService } from '../../services/map.service';
   templateUrl: './map.component.html',
   styleUrls: ['./map.component.css']
 })
-export class MapComponent implements OnInit {
+export class MapComponent implements OnInit, AfterViewInit {
   map: any;
   spinner: Boolean = true;
   routeCoordinates: number[][];
@@ -17,8 +17,6 @@ export class MapComponent implements OnInit {
     this.routeCoordinates = this.mapService.getRouteCoordinates();
   }
 
-  // tslint:disable-next-line:use-life-cycle-interface
-  // tslint:disable-next-line:use-lifecycle-interface
   ngAfterViewInit() {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition((position) => {
