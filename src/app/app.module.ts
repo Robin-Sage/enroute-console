@@ -18,6 +18,7 @@ import {ChipsModule} from 'primeng/chips';
 import {ButtonModule} from 'primeng/button';
 import {TabViewModule} from 'primeng/tabview';
 import {CodeHighlighterModule} from 'primeng/codehighlighter';
+import { ViewComponent } from './view/view.component';
 
 
 
@@ -30,8 +31,9 @@ import {CodeHighlighterModule} from 'primeng/codehighlighter';
     HomeComponent,
     UploadComponent,
     DragDropDirective,
-   
-    
+    ViewComponent,
+
+
   ],
   imports: [
     BrowserModule,

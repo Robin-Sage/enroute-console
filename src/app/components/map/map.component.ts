@@ -24,7 +24,7 @@ export class MapComponent implements OnInit, AfterViewInit {
           center: [position.coords.latitude, position.coords.longitude],
           zoom: 10,
         });
-        leaf.tileLayer('http://192.168.102.192:8080/styles/klokantech-basic/{z}/{x}/{y}.png', {
+        leaf.tileLayer('http://172.20.10.4:8080/styles/klokantech-basic/{z}/{x}/{y}.png', {
           minZoom: 10,
           maxZoom: 15,
           crossOrigin: true,

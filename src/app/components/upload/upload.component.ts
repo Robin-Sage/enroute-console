@@ -6,6 +6,7 @@ import {  IDropdownSettings } from 'ng-multiselect-dropdown';
 
 
 
+
 @Component({
   selector: 'app-upload',
   templateUrl: './upload.component.html',
@@ -15,9 +16,12 @@ export class UploadComponent implements OnInit {
 
   uploadForm: FormGroup;
   articleForm:FormGroup;
-  type:Array<String>=["audio","video","book"]
-  genre:Array<String>=["Action","Thriller","Drama","Romantic","Horror","Comedy"]
+ lang:Array<String>=["hindi","english"];
+  genre:Array<String>=["action","thriller","drama","romantic","horror","comedy"];
   selectedGenre = [];
+  selectedItems:any;
+  title:any;
+  selectedLanguage:any;
   dropdownSettings : IDropdownSettings = {};
   progress: number = 0;
   showUpload:Boolean=true
@@ -25,7 +29,7 @@ export class UploadComponent implements OnInit {
   value=[];
   successMessage="";
   errorMessage="";
-    
+
   constructor(private formBuilder: FormBuilder,private uploadService:UploadService ,private cd: ChangeDetectorRef) { }
 
   ngOnInit() {
@@ -46,14 +50,9 @@ export class UploadComponent implements OnInit {
       genre:['', Validators.required],
       description:['',Validators.required],
       media:['',Validators.required],
-     
+
     });
-   this.articleForm=this.formBuilder.group({
-    title: ['', Validators.required],
-    tag: ['', Validators.required],
-    description:['',Validators.required],
-    image:['',Validators.required],
-   })
+
   }
   onItemSelect(item: any) {
     this.selectedGenre.push(item)
@@ -64,11 +63,15 @@ export class UploadComponent implements OnInit {
     this.uploadForm.controls['genre'].setValue(this.selectedGenre);
   }
   upload(){
-    
-    
-    this.uploadService.uploadFile(this.uploadForm.value)
+
+    let genre=(this.selectedItems)[0];
+    let language=this.selectedLanguage;
+    let url='/home/geekymanas/Downloads/uploads'+this.files1[0];
+    let name=this.title;
+
+    this.uploadService.uploadFile({'genre':genre,'language':language,'url':url,'name':name})
     .subscribe((data) => {
-      this.successMessage="Uploaded successfully"
+      this.successMessage="Uploaded successfully";
     })
     this.uploadForm.reset();
     this.files1=[]
@@ -88,18 +91,18 @@ export class UploadComponent implements OnInit {
   uploadFile(event) {
     for (let index = 0; index < event.length; index++) {
       const element = event[index];
-      console.log(element)
+      console.log(element);
       this.uploadForm.patchValue({
         media: element
       });
-      this.files1.push(element.name)
-    }  
-    
-     
+      this.files1.push(element.name);
+    }
+
+
      this.uploadForm.get('media').updateValueAndValidity()
     this.showUpload=false;
     this.cd.markForCheck();
-   
+
   }
   deleteAttachment(index) {
     this.files1.splice(index, 1)
@@ -127,10 +130,8 @@ export class UploadComponent implements OnInit {
     this.articleForm.patchValue({
       image: ''
     });
-   event.target.value=''
+   event.target.value='';
   }
-  uploadArticle(){
-    console.log(this.articleForm.value)
-  }
+
 
 }

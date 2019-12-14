@@ -5,9 +5,7 @@
             <li class="nav-item">
                 <a class="nav-link active" data-toggle="tab" href="#file">Upload File</a>
             </li>
-            <li class="nav-item">
-                <a class="nav-link" data-toggle="tab" href="#article">Upload Article</a>
-            </li>
+
         </ul>
         <div class="tab-content">
             <div class="container tab-pane active" id="file">
@@ -16,7 +14,7 @@
 
                     <div class="uploadfilecontainer" (click)="fileInput.click()" appDragDrop
                         (onFileDropped)="uploadFile($event)">
-                        <input hidden type="file" #fileInput (change)="uploadFile($event.target.files)">
+                        <input hidden type="file" id="inputFile" #fileInput (change)="uploadFile($event.target.files)">
                     </div>
                 </div>
 
@@ -35,29 +33,24 @@
                     <form>
                         <div class="form-group" [formGroup]="uploadForm">
                             <label for="title">Title</label>
-                            <input type="text" class="form-control" id="title" placeholder="Enter Title"
+                            <input [(ngModel)]="title" name="title" type="text" class="form-control" id="title" placeholder="Enter Title"
                                 formControlName="title">
                             <p *ngIf="uploadForm.controls.title.errors && uploadForm.controls.title.dirty"
                                 class="text-danger">This field is required!</p>
                         </div>
-                        <div class="form-group" [formGroup]="uploadForm">
-                            <label for="genre">Type</label><br>
-                            <div class="form-check-inline" *ngFor="let ele of type" [formGroup]="uploadForm">
-                                <label class="form-check-label">
-                                    <input class="form-check-input" formControlName="type" type="radio" name="type"
-                                        [value]="ele">{{ele}}
-                                </label>
+                        <!-- <div class="form-group">
+                          <label for="genre">Language</label>
 
-                            </div>
-                            <p *ngIf="uploadForm.controls.type.errors && uploadForm.controls.type.dirty"
-                                class="text-danger">This field is required!</p>
-                        </div>
+                          <ng-multiselect-dropdown name="lang" [placeholder]="'select language'" [data]="lang"
+                              [(ngModel)]="selectedLanguage" [settings]="dropdownSettings"
+                              (onSelect)="onItemSelect($event)" (onDeSelect)="onItemDeSelect($event)">
+                          </ng-multiselect-dropdown>
+                          <p *ngIf="uploadForm.controls.lang.errors && uploadForm.controls.lang.dirty"
+                              class="text-danger">This field is required!</p>
+                      </div> -->
                         <div class="form-group">
                             <label for="genre">Genre</label>
-                            <!-- <select class="form-control" formControlName="genre"  multiple data-max-options="2" >
-                                                <option disabled selected value="">select genre</option>
-                                                <option *ngFor="let element of genre" [value]="element">{{element}}</option>
-                                            </select> -->
+
                             <ng-multiselect-dropdown name="genre" [placeholder]="'select genre'" [data]="genre"
                                 [(ngModel)]="selectedItems" [settings]="dropdownSettings"
                                 (onSelect)="onItemSelect($event)" (onDeSelect)="onItemDeSelect($event)">
@@ -65,6 +58,15 @@
                             <p *ngIf="uploadForm.controls.genre.errors && uploadForm.controls.genre.dirty"
                                 class="text-danger">This field is required!</p>
                         </div>
+
+                        <div class="form-group">
+                          <label for="type">Language</label>
+
+                           <input   name="lang" [(ngModel)]="selectedLanguage" type = radio value="hindi" id="type">Hindi
+                           <input  name="lang" [(ngModel)]="selectedLanguage" type = radio value="english" id="type">English
+                           <p *ngIf="uploadForm.controls.type.errors && uploadForm.controls.type.dirty"
+                           class="text-danger">This field is required!</p>
+                      </div>
                         <div class="form-group" [formGroup]="uploadForm">
                             <label for="description">Description</label>
                             <textarea rows="4" class="form-control" id="description" placeholder="Enter description"
@@ -72,11 +74,12 @@
                             <p *ngIf="uploadForm.controls.description.errors && uploadForm.controls.description.dirty"
                                 class="text-danger">This field is required!</p>
                         </div>
-                        
-                        
+
+
+
                         <div class="modal-footer">
 
-                            <button type="button" class="btn btn-primary"  data-dismiss="modal" [disabled]="uploadForm.invalid"
+                            <button type="button" class="btn btn-primary"  data-dismiss="modal"
                                 (click)="upload()">upload</button>
 
                         </div>
@@ -88,55 +91,7 @@
 
 
             </div>
-            <div id="article" class="container tab-pane fade">
-                <form>
-                    <div class="form-group" [formGroup]="articleForm">
-                        <label for="title">Title</label>
-                        <input type="text" class="form-control" id="title" placeholder="Enter Title"
-                            formControlName="title">
-                        <p *ngIf="articleForm.controls.title.errors && articleForm.controls.title.dirty"
-                            class="text-danger">This field is required!</p>
-                    </div>
-                    <div class="form-group" [formGroup]="articleForm">
-                        <label for="tag">Tags</label>
-                        <!-- <input type="text" class="form-control" id="tag" placeholder="Enter Tags"  > -->
-                        <p-chips formControlName="tag"></p-chips>
-                        <p *ngIf="articleForm.controls.tag.errors && articleForm.controls.tag.dirty"
-                            class="text-danger">This field is required!</p>
-                    </div>
-                    <div class="form-group" [formGroup]="articleForm">
-                        <label for="description">Description</label>
-                        <textarea rows="4" class="form-control" id="description" placeholder="Enter description"
-                            formControlName="description"></textarea>
-                        <p *ngIf="articleForm.controls.description.errors && articleForm.controls.description.dirty"
-                            class="text-danger">This field is required!</p>
-                    </div>
 
-                    <div class="">
-
-                        <input  type="file" accept="image/*" (change)="showPreview($event)" id="imgPreview" />
-
-                        <!-- Image Preview -->
-
-                        <div class="" *ngIf="imageURL && imageURL !== ''">
-                            <img class="img-thumbnail" [src]="imageURL" [alt]="uploadForm.value.name"
-                                style="height: 100px;width:100px">
-                                <button style="float: right; background-color: transparent;border: transparent;" class="delete-file" (click)="deleteImage($event)" >
-                                        <img style="height: 15px;width:15px ; float: right;" src="../../assets/Recycle_Bin_Full.png">
-                                    </button>
-                        </div>
-                    </div>
-
-                    <div class="modal-footer">
-                            
-                            <button type="button"  [disabled]="articleForm.invalid" data-dismiss="modal"
-                                (click)="uploadArticle()">upload</button>
-
-                    </div>
-                </form>
-               
-
-            </div>
 
         </div>
 
